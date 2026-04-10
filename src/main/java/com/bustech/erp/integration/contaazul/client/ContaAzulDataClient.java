@@ -7,22 +7,19 @@ import com.bustech.erp.integration.contaazul.dto.ContaAzulCategoryDto;
 import com.bustech.erp.integration.contaazul.dto.ContaAzulCostCenterDto;
 import com.bustech.erp.integration.contaazul.dto.ContaAzulEventDetailDto;
 import com.bustech.erp.integration.contaazul.dto.ContaAzulEventDto;
+import com.bustech.erp.integration.contaazul.dto.ContaAzulPageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-// File: integration/contaazul/client/ContaAzulDataClient.java
-//
-// Isolated HTTP client for fetching financial data from the Conta Azul API.
-// All API paths are configurable via app.contaazul.api-paths.* in application.yml.
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -32,35 +29,45 @@ public class ContaAzulDataClient {
     private final ContaAzulProperties props;
 
     public List<ContaAzulCategoryDto> fetchCategories(String accessToken) {
-        return fetchList(accessToken, props.apiPaths().categories(),
-            new ParameterizedTypeReference<List<ContaAzulCategoryDto>>() {});
+        return fetchPaginated(accessToken, props.apiPaths().categories(),
+            new ParameterizedTypeReference<ContaAzulPageResponse<ContaAzulCategoryDto>>() {});
     }
 
     public List<ContaAzulCostCenterDto> fetchCostCenters(String accessToken) {
-        return fetchList(accessToken, props.apiPaths().costCenters(),
-            new ParameterizedTypeReference<List<ContaAzulCostCenterDto>>() {});
+        return fetchPaginated(accessToken, props.apiPaths().costCenters(),
+            new ParameterizedTypeReference<ContaAzulPageResponse<ContaAzulCostCenterDto>>() {});
     }
 
     public List<ContaAzulAccountDto> fetchAccounts(String accessToken) {
-        return fetchList(accessToken, props.apiPaths().accounts(),
-            new ParameterizedTypeReference<List<ContaAzulAccountDto>>() {});
-    }
-
-    public List<ContaAzulEventDto> fetchEvents(String accessToken) {
-        return fetchList(accessToken, props.apiPaths().events(),
-            new ParameterizedTypeReference<List<ContaAzulEventDto>>() {});
+        return fetchPaginated(accessToken, props.apiPaths().accounts(),
+            new ParameterizedTypeReference<ContaAzulPageResponse<ContaAzulAccountDto>>() {});
     }
 
     /**
-     * Fetches the full detail of a single financial event (parcela) by its
-     * external ID. Includes the {@code rateio[]} apportionment array.
-     *
-     * @param accessToken valid OAuth2 access token for the company
-     * @param eventId     external ID (UUID) of the event in Conta Azul
-     * @return the detail DTO, or {@link Optional#empty()} if the event was not
-     *         found (404). All other HTTP errors throw
-     *         {@link com.bustech.erp.common.exception.IntegrationException}.
+     * Fetches both receivables and payables, tagging each with RECEITA/DESPESA.
      */
+    public List<ContaAzulEventDto> fetchEvents(String accessToken) {
+        List<ContaAzulEventDto> all = new ArrayList<>();
+
+        List<ContaAzulEventDto> receivables = fetchPaginated(accessToken,
+            props.apiPaths().receivables(),
+            new ParameterizedTypeReference<ContaAzulPageResponse<ContaAzulEventDto>>() {});
+        for (ContaAzulEventDto dto : receivables) {
+            all.add(dto.withType("RECEITA"));
+        }
+
+        List<ContaAzulEventDto> payables = fetchPaginated(accessToken,
+            props.apiPaths().payables(),
+            new ParameterizedTypeReference<ContaAzulPageResponse<ContaAzulEventDto>>() {});
+        for (ContaAzulEventDto dto : payables) {
+            all.add(dto.withType("DESPESA"));
+        }
+
+        log.info("[CA] Eventos: {} recebíveis + {} pagáveis = {} total",
+            receivables.size(), payables.size(), all.size());
+        return all;
+    }
+
     public Optional<ContaAzulEventDetailDto> fetchEventDetail(String accessToken, String eventId) {
         String path = props.apiPaths().parcelDetail().replace("{id}", eventId);
         try {
@@ -73,7 +80,7 @@ public class ContaAzulDataClient {
                 .block();
             return Optional.ofNullable(detail);
         } catch (WebClientResponseException.NotFound e) {
-            log.warn("[CA] Parcela {} não encontrada (404) — ignorando", eventId);
+            log.warn("[CA] Parcela {} não encontrada (404)", eventId);
             return Optional.empty();
         } catch (WebClientResponseException e) {
             log.error("[CA] Erro ao buscar detalhe da parcela {}: status={}, body={}",
@@ -87,39 +94,36 @@ public class ContaAzulDataClient {
         }
     }
 
-    private <T> List<T> fetchList(
+    private <T> List<T> fetchPaginated(
             String accessToken,
             String path,
-            ParameterizedTypeReference<List<T>> typeRef) {
+            ParameterizedTypeReference<ContaAzulPageResponse<T>> typeRef) {
 
         try {
-            List<T> result = webClientBuilder.build()
+            ContaAzulPageResponse<T> page = webClientBuilder.build()
                 .get()
                 .uri(props.apiBaseUrl() + path)
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, response -> {
-                    if (response.statusCode().value() == 404) {
-                        log.warn("Conta Azul resource not found at {}: returning empty list", path);
-                        return null; // handled below by returning empty list
-                    }
-                    return response.createException();
-                })
                 .bodyToMono(typeRef)
                 .block();
 
-            return result != null ? result : Collections.emptyList();
+            if (page == null) return Collections.emptyList();
+
+            List<T> items = page.content();
+            log.info("[CA] {} → {} itens (total={})", path, items.size(), page.itensTotais());
+            return items;
 
         } catch (WebClientResponseException.NotFound e) {
-            log.warn("Conta Azul path {} not found — returning empty list", path);
+            log.warn("[CA] Path {} not found — returning empty list", path);
             return Collections.emptyList();
         } catch (WebClientResponseException e) {
-            log.error("Conta Azul API error at {}: status={}, body={}",
+            log.error("[CA] API error at {}: status={}, body={}",
                 path, e.getStatusCode(), e.getResponseBodyAsString());
             throw new IntegrationException(
                 "Erro na API Conta Azul [" + path + "]: " + e.getStatusCode());
         } catch (Exception e) {
-            log.error("Erro inesperado ao buscar {} na Conta Azul: {}", path, e.getMessage());
+            log.error("[CA] Erro inesperado ao buscar {}: {}", path, e.getMessage());
             throw new IntegrationException(
                 "Erro inesperado ao buscar dados Conta Azul [" + path + "]");
         }

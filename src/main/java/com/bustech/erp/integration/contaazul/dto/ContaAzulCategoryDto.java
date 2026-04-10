@@ -7,6 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 // Adjust field names to match the real API response if needed.
 public record ContaAzulCategoryDto(
     String id,
-    String name,
-    String type  // expected: "INCOME" or "EXPENSE"
+    @JsonProperty("nome") String name,
+    @JsonProperty("tipo") String type
 ) {}

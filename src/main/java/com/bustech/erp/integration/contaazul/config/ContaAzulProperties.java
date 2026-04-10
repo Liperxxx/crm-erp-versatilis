@@ -47,23 +47,21 @@ public record ContaAzulProperties(
      * Users are redirected here to grant access.
      * Default: {@code https://api.contaazul.com/auth/oauth/v2/authorize}
      */
-    @DefaultValue("https://api.contaazul.com/auth/oauth/v2/authorize")
+    @DefaultValue("https://auth.contaazul.com/login")
     String authUrl,
 
     /**
      * Full URL of the Conta Azul token endpoint.
      * Used to exchange an authorization code or refresh token for an access token.
-     * Default: {@code https://api.contaazul.com/auth/oauth/v2/token}
      */
-    @DefaultValue("https://api.contaazul.com/auth/oauth/v2/token")
+    @DefaultValue("https://auth.contaazul.com/oauth2/token")
     String tokenUrl,
 
     /**
      * Base URL for all Conta Azul data API calls.
      * Resource paths from {@link ApiPaths} are appended to this URL.
-     * Default: {@code https://api.contaazul.com}
      */
-    @DefaultValue("https://api.contaazul.com")
+    @DefaultValue("https://api-v2.contaazul.com")
     String apiBaseUrl,
 
     /**
@@ -88,16 +86,15 @@ public record ContaAzulProperties(
      * All fields have defaults — only override if the Conta Azul API differs.
      */
     public record ApiPaths(
-        @DefaultValue("/v1/categories")           String categories,
-        @DefaultValue("/v1/costCenters")          String costCenters,
-        @DefaultValue("/v1/accounts")             String accounts,
-        @DefaultValue("/v1/financial-events")     String events,
+        @DefaultValue("/v1/categorias")           String categories,
+        @DefaultValue("/v1/centro-de-custo")      String costCenters,
+        @DefaultValue("/v1/conta-financeira")     String accounts,
+        @DefaultValue("/v1/financeiro/eventos-financeiros/contas-a-receber/buscar") String receivables,
+        @DefaultValue("/v1/financeiro/eventos-financeiros/contas-a-pagar/buscar")   String payables,
         /**
-         * Detail endpoint for a single financial event (parcela).
-         * The literal {@code {id}} placeholder is replaced at runtime with the event's
-         * external ID.
-         * Default: {@code /v1/financial-events/{id}}
+         * Detail endpoint for a single parcela.
+         * The literal {@code {id}} placeholder is replaced at runtime.
          */
-        @DefaultValue("/v1/financial-events/{id}") String parcelDetail
+        @DefaultValue("/v1/financeiro/eventos-financeiros/parcelas/{id}") String parcelDetail
     ) {}
 }

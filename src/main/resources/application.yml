@@ -54,14 +54,16 @@ app:
     client-id: ${CONTAAZUL_CLIENT_ID:}
     client-secret: ${CONTAAZUL_CLIENT_SECRET:}
     redirect-uri: ${CONTAAZUL_REDIRECT_URI:}
-    auth-url: https://api.contaazul.com/auth/oauth/v2/authorize
+    auth-url: https://auth.contaazul.com/login
     token-url: https://auth.contaazul.com/oauth2/token
-    api-base-url: https://api.contaazul.com
+    api-base-url: https://api-v2.contaazul.com
     # URL do frontend para redirecionar apos o OAuth2 callback
     frontend-return-url: ${CONTAAZUL_FRONTEND_URL:http://localhost:3000/dashboard.html}
-    # API resource paths — adjust to match actual Conta Azul API when confirmed
+    # API resource paths — Conta Azul API v2 (Portuguese)
     api-paths:
-      categories: /v1/categories
-      cost-centers: /v1/costCenters
-      accounts: /v1/accounts
-      events: /v1/financial-events
+      categories: /v1/categorias
+      cost-centers: /v1/centro-de-custo
+      accounts: /v1/conta-financeira
+      receivables: /v1/financeiro/eventos-financeiros/contas-a-receber/buscar
+      payables: /v1/financeiro/eventos-financeiros/contas-a-pagar/buscar
+      parcel-detail: /v1/financeiro/eventos-financeiros/parcelas/{id}

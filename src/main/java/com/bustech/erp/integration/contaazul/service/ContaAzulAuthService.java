@@ -41,7 +41,8 @@ public class ContaAzulAuthService {
             + "?response_type=code"
             + "&client_id=" + props.clientId()
             + "&redirect_uri=" + props.redirectUri()
-            + "&state=" + state;
+            + "&state=" + state
+            + "&scope=openid+profile+aws.cognito.signin.user.admin";
     }
 
     @Transactional

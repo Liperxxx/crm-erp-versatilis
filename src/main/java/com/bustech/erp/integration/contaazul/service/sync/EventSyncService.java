@@ -60,7 +60,6 @@ public class EventSyncService {
                 entity.setStatus(resolveStatus(dto.status()));
                 entity.setIssueDate(dto.issueDate());
                 entity.setDueDate(dto.dueDate());
-                entity.setPaidDate(dto.paidDate());
 
                 // Resolve nullable FKs by external IDs — missing FK doesn't block the event
                 entity.setCategory(resolveCategory(companyId, dto.categoryId()));
@@ -109,10 +108,12 @@ public class EventSyncService {
     private TransactionStatus resolveStatus(String status) {
         if (status == null) return TransactionStatus.PENDING;
         return switch (status.toUpperCase()) {
-            case "PAID", "RECEIVED", "LIQUIDADO", "PAGO" -> TransactionStatus.PAID;
-            case "CANCELLED", "CANCELADO" -> TransactionStatus.CANCELLED;
-            case "OVERDUE", "VENCIDO" -> TransactionStatus.OVERDUE;
-            case "PARTIALLY_PAID", "PARCIALMENTE_PAGO" -> TransactionStatus.PARTIALLY_PAID;
+            case "PAID", "RECEIVED", "LIQUIDADO", "PAGO", "RECEBIDO" -> TransactionStatus.PAID;
+            case "CANCELLED", "CANCELADO", "PERDIDO" -> TransactionStatus.CANCELLED;
+            case "OVERDUE", "VENCIDO", "ATRASADO" -> TransactionStatus.OVERDUE;
+            case "PARTIALLY_PAID", "PARCIALMENTE_PAGO", "RECEBIDO_PARCIAL" -> TransactionStatus.PARTIALLY_PAID;
+            case "RENEGOCIADO" -> TransactionStatus.CANCELLED;
+            case "EM_ABERTO", "PENDING", "PENDENTE" -> TransactionStatus.PENDING;
             default -> TransactionStatus.PENDING;
         };
     }

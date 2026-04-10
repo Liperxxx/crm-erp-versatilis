@@ -9,6 +9,6 @@ import java.math.BigDecimal;
 // Adjust field names to match the real API response if needed.
 public record ContaAzulAccountDto(
     String id,
-    String name,
-    @JsonProperty("current_balance") BigDecimal balance
+    @JsonProperty("nome") String name,
+    @JsonProperty("saldo_atual") BigDecimal balance
 ) {}
