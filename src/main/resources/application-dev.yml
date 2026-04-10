@@ -1,0 +1,55 @@
+spring:
+  datasource:
+    # Supabase — use a conexão direta (porta 5432), NÃO o connection pooler (porta 6543)
+    # Formato: jdbc:postgresql://db.<PROJECT_REF>.supabase.co:5432/postgres?sslmode=require
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      # Supabase free tier: limite de 60 conexões diretas — mantenha pool pequeno
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 30000
+      idle-timeout: 600000
+      # SSL já vem no sslmode=require da URL, mas garantimos pelo driver também
+      data-source-properties:
+        ssl: true
+        sslfactory: org.postgresql.ssl.NonValidatingFactory
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+
+logging:
+  level:
+    com.bustech.erp: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+app:
+  jwt:
+    secret: dev-secret-key-must-be-replaced-in-production-256bits
+    expiration-ms: 86400000
+
+  contaazul:
+    # Preencha CONTAAZUL_CLIENT_ID e CONTAAZUL_CLIENT_SECRET no .env
+    # Obtenha em: https://developer.contaazul.com
+    #
+    # Para uso local, registre http://localhost:8081/api/integrations/conta-azul/callback
+    # como redirect_uri no portal Conta Azul (ou use um tunel: ngrok/cloudflared).
+    #
+    # Alternativa sem URL publica: use o endpoint DEV para injetar o token manualmente:
+    #   POST /api/dev/conta-azul/token/{companyId}
+    #   Body: { "access_token": "...", "refresh_token": "...", "expires_in": 3600 }
+    redirect-uri: ${CONTAAZUL_REDIRECT_URI:https://contaazul.com}
+    frontend-return-url: ${CONTAAZUL_FRONTEND_URL:http://localhost:3000/dashboard.html}

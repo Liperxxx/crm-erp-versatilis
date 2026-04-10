@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações — ERP Bustech</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div class="erp-layout">
+  <main class="page-content">
+
+    <!-- Header -->
+    <div class="filter-bar">
+      <span class="filter-label">Configurações</span>
+    </div>
+
+    <!-- Profile section -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-card-title">Meu Perfil</span>
+      </div>
+      <table>
+        <tbody id="profile-table">
+          <tr><td colspan="2" class="td-empty">Carregando…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- System info -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-card-title">Informações do Sistema</span>
+      </div>
+      <table>
+        <tbody>
+          <tr><td class="td-secondary" style="width:180px">Versão</td><td>1.0.0</td></tr>
+          <tr><td class="td-secondary">Backend</td><td id="sys-backend">Verificando…</td></tr>
+          <tr><td class="td-secondary">API Base URL</td><td><code id="sys-api-url"></code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main><!-- /page-content -->
+</div><!-- /erp-layout -->
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/components.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  Layout.requireAuth();
+  Layout.renderLayout('configuracoes', 'Configurações');
+
+  // API URL
+  document.getElementById('sys-api-url').textContent = API.BASE;
+
+  // Health check
+  fetch(API.BASE + '/actuator/health')
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      document.getElementById('sys-backend').innerHTML =
+        '<span class="badge badge-success">' + (d.status || 'UP') + '</span>';
+    })
+    .catch(function () {
+      document.getElementById('sys-backend').innerHTML =
+        '<span class="badge badge-danger">Offline</span>';
+    });
+
+  // Profile
+  async function loadProfile() {
+    var tbody = document.getElementById('profile-table');
+    try {
+      var u = await API.get(API.userMe());
+      if (!u) return;
+      var roleBadge = u.role === 'ADMIN' ? '<span class="badge badge-blue">Admin</span>'
+                    : u.role === 'MANAGER' ? '<span class="badge badge-warning">Gerente</span>'
+                    : u.role === 'OPERATOR' ? '<span class="badge badge-success">Operador</span>'
+                    : '<span class="badge badge-neutral">' + esc(u.role || '—') + '</span>';
+      tbody.innerHTML = ''
+        + '<tr><td class="td-secondary" style="width:180px">Nome</td><td>' + esc(u.name || '—') + '</td></tr>'
+        + '<tr><td class="td-secondary">E-mail</td><td>' + esc(u.email) + '</td></tr>'
+        + '<tr><td class="td-secondary">Perfil</td><td>' + roleBadge + '</td></tr>'
+        + '<tr><td class="td-secondary">Empresa</td><td>' + esc(u.companyName || '—') + '</td></tr>'
+        + '<tr><td class="td-secondary">Membro desde</td><td>' + formatDatetime(u.createdAt) + '</td></tr>';
+    } catch (err) {
+      tbody.innerHTML = '<tr><td colspan="2" class="td-empty">Erro: ' + esc(err.message) + '</td></tr>';
+    }
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function formatDatetime(iso) {
+    if (!iso) return '—';
+    try {
+      var d = new Date(iso);
+      return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    } catch (_) { return iso; }
+  }
+
+  loadProfile();
+})();
+</script>
+</body>
+</html>

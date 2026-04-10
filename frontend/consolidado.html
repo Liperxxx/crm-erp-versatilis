@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consolidado — ERP Bustech</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="erp-layout">
+  <main class="page-content">
+
+    <!-- ── Filter bar ──────────────────────────────────────────────────── -->
+    <div class="filter-bar">
+      <span class="filter-label">Período</span>
+      <div class="filter-sep"></div>
+      <input type="date" id="filter-start" class="filter-input" aria-label="Data inicial">
+      <span class="filter-label" style="font-weight:400;text-transform:none;letter-spacing:0">até</span>
+      <input type="date" id="filter-end"   class="filter-input" aria-label="Data final">
+      <div class="filter-sep"></div>
+      <button id="btn-apply" class="btn btn-primary">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Aplicar
+      </button>
+    </div>
+
+    <!-- ── KPI row ─────────────────────────────────────────────────────── -->
+    <section aria-label="Indicadores consolidados">
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Receita Total</div>
+          <div class="kpi-value" id="consol-revenue">—</div>
+          <span class="kpi-delta neutral">Grupo</span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Despesas Total</div>
+          <div class="kpi-value" id="consol-expense">—</div>
+          <span class="kpi-delta neutral">Grupo</span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Lucro Líquido</div>
+          <div class="kpi-value" id="consol-profit">—</div>
+          <span class="kpi-delta neutral">Grupo</span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Margem Líquida</div>
+          <div class="kpi-value" id="consol-margin">—</div>
+          <span class="kpi-delta neutral">Grupo</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Revenue share & per-company breakdown ───────────────────────── -->
+    <section aria-label="Participação por empresa">
+      <div class="charts-row">
+
+        <div class="chart-card">
+          <div class="section-head">
+            <span class="section-title">Participação na Receita</span>
+          </div>
+          <div class="share-row" id="consol-share-block">
+            <div class="share-item">
+              <div class="share-label">
+                <span class="share-label-name"><span class="company-dot dot-a"></span>Bustech</span>
+                <span class="share-label-value" id="consol-share-a">—</span>
+              </div>
+              <div class="share-bar-track">
+                <div class="share-bar-fill-a" id="consol-bar-a" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="share-item">
+              <div class="share-label">
+                <span class="share-label-name"><span class="company-dot dot-b"></span>Versatilis</span>
+                <span class="share-label-value" id="consol-share-b">—</span>
+              </div>
+              <div class="share-bar-track">
+                <div class="share-bar-fill-b" id="consol-bar-b" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-head" style="margin-top:16px">
+            <span class="section-title">Resultados por Empresa</span>
+          </div>
+          <div class="consol-co-grid" id="consol-co-grid">
+            <!-- Filled by JS -->
+            <div class="consol-co-card">
+              <div class="consol-co-name"><span class="company-dot dot-a"></span>Bustech</div>
+              <div class="consol-co-metrics">
+                <div class="consol-co-metric">
+                  <span class="consol-co-metric-label">Receita</span>
+                  <span class="consol-co-metric-value" id="consol-co-a-revenue">—</span>
+                </div>
+                <div class="consol-co-metric">
+                  <span class="consol-co-metric-label">Despesas</span>
+                  <span class="consol-co-metric-value" id="consol-co-a-expense">—</span>
+                </div>
+                <div class="consol-co-metric">
+                  <span class="consol-co-metric-label">Lucro</span>
+                  <span class="consol-co-metric-value" id="consol-co-a-profit">—</span>
+                </div>
+                <div class="consol-co-metric">
+                  <span class="consol-co-metric-label">Participação</span>
+                  <span class="consol-co-metric-value" id="consol-co-a-share">—</span>
+                </div>
+              </div>
+            </div>
+            <div class="consol-co-card">
+              <div class="consol-co-name"><span class="company-dot dot-b"></span>Versatilis</div>
+              <div class="consol-co-metrics">
+                <div class="consol-co-metric">
+                  <span class="consol-co-metric-label">Receita</span>
+                  <span class="consol-co-metric-value" id="consol-co-b-revenue">—</span>
+                </div>
+                <div class="consol-co-metric">
+                  <span class="consol-co-metric-label">Despesas</span>
+                  <span class="consol-co-metric-value" id="consol-co-b-expense">—</span>
+                </div>
+                <div class="consol-co-metric">
+                  <span class="consol-co-metric-label">Lucro</span>
+                  <span class="consol-co-metric-value" id="consol-co-b-profit">—</span>
+                </div>
+                <div class="consol-co-metric">
+                  <span class="consol-co-metric-label">Participação</span>
+                  <span class="consol-co-metric-value" id="consol-co-b-share">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="section-head">
+            <span class="section-title">Resultado Mensal Consolidado</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="consol-chart-monthly"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Monthly table ───────────────────────────────────────────────── -->
+    <section aria-label="Tabela consolidada mensal">
+      <div class="table-card">
+        <div class="table-card-header">
+          <span class="table-card-title">Resultado Mensal Consolidado</span>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Mês</th>
+                <th class="num">Receita</th>
+                <th class="num">Despesas</th>
+                <th class="num">Lucro</th>
+                <th class="num">Rec. Bustech</th>
+                <th class="num">Rec. Versatilis</th>
+              </tr>
+            </thead>
+            <tbody id="consol-table">
+              <tr><td colspan="6" class="td-empty">Carregando…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /page-content -->
+</div><!-- /erp-layout -->
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script src="/assets/js/consolidado.js"></script>
+</body>
+</html>

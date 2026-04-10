@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integrações — ERP Bustech</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+
+<div class="erp-layout">
+  <main class="page-content">
+
+    <!-- ── Integration cards ───────────────────────────────────────────── -->
+    <section aria-label="Integrações Conta Azul">
+      <h2 class="section-heading">Conta Azul</h2>
+      <div class="integration-grid" id="integration-grid">
+        <!-- populated by JS -->
+        <div class="table-card" style="grid-column:1/-1">
+          <p class="td-empty" style="padding:32px;text-align:center">Carregando…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Sync log ────────────────────────────────────────────────────── -->
+    <section aria-label="Histórico de sincronização">
+      <div class="table-card">
+        <div class="table-card-header">
+          <span class="table-card-title">Histórico de Sincronização</span>
+          <button id="btn-refresh-log" class="btn btn-ghost btn-sm">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+            </svg>
+            Atualizar
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Evento</th>
+              <th>Horário</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="sync-log-table">
+            <tr><td colspan="4" class="td-empty">Nenhum registro de sincronização disponível.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main><!-- /page-content -->
+</div><!-- /erp-layout -->
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/integracoes.js"></script>
+</body>
+</html>

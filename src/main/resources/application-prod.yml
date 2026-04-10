@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+
+  jpa:
+    show-sql: false
+
+server:
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+logging:
+  level:
+    com.bustech.erp: INFO
+    org.springframework: WARN
+    root: WARN
+  file:
+    name: /var/log/erp/application.log
+
+app:
+  contaazul:
+    # Em producao, todas as credenciais VM via variaveis de ambiente obrigatorias.
+    # redirect-uri e frontend-return-url nao tem default seguro — devem ser set explicitamente.
+    # auth-url, token-url e api-base-url raramente precisam de override (default = Conta Azul prod).
+    redirect-uri: ${CONTAAZUL_REDIRECT_URI}
+    frontend-return-url: ${CONTAAZUL_FRONTEND_URL}

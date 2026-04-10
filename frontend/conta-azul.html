@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conta Azul — ERP Bustech</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div class="erp-layout">
+  <main class="page-content">
+
+    <!-- Header -->
+    <div class="filter-bar">
+      <span class="filter-label">Integração Conta Azul</span>
+      <div class="filter-spacer"></div>
+      <button class="btn btn-primary" id="btn-sync-all">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+          <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+        </svg>
+        Sincronizar Todas
+      </button>
+    </div>
+
+    <!-- Connection cards -->
+    <div id="connections-grid" class="companies-grid">
+      <div class="td-empty">Carregando status das conexões…</div>
+    </div>
+
+    <!-- Sync log -->
+    <div id="sync-log" class="sync-log" style="display:none;">
+      <div class="table-card">
+        <div class="table-card-header">
+          <span class="table-card-title">Log de Sincronização</span>
+          <button class="btn btn-ghost" id="btn-clear-log">Limpar</button>
+        </div>
+        <div id="sync-log-body" class="sync-log-body"></div>
+      </div>
+    </div>
+
+  </main><!-- /page-content -->
+</div><!-- /erp-layout -->
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/conta-azul.js"></script>
+</body>
+</html>

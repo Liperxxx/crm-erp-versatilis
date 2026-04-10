@@ -1,0 +1,13 @@
+package com.bustech.erp.common.enums;
+
+public enum ErrorCode {
+    RESOURCE_NOT_FOUND,
+    BUSINESS_RULE_VIOLATION,
+    INTEGRATION_ERROR,
+    UNAUTHORIZED,
+    BAD_CREDENTIALS,
+    ACCESS_DENIED,
+    VALIDATION_ERROR,
+    ILLEGAL_ARGUMENT,
+    INTERNAL_ERROR
+}

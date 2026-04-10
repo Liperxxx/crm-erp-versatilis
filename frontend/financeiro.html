@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financeiro — ERP Bustech</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+
+<div class="erp-layout">
+  <main class="page-content">
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Filtros</span>
+      <div class="filter-sep"></div>
+      <select id="filter-type" class="filter-input" aria-label="Tipo de lançamento">
+        <option value="">Todos os tipos</option>
+        <option value="INCOME">Receita</option>
+        <option value="EXPENSE">Despesa</option>
+        <option value="TRANSFER">Transferência</option>
+      </select>
+      <select id="filter-status" class="filter-input" aria-label="Status do lançamento">
+        <option value="">Todos os status</option>
+        <option value="PENDING">Pendente</option>
+        <option value="PAID">Pago</option>
+        <option value="OVERDUE">Vencido</option>
+        <option value="CANCELLED">Cancelado</option>
+        <option value="PARTIALLY_PAID">Parcial</option>
+      </select>
+      <div class="filter-spacer"></div>
+      <div class="filter-meta">
+        <span class="filter-meta-dot"></span>
+        <span id="filter-count">Carregando…</span>
+      </div>
+    </div>
+
+    <!-- Tabs: Lançamentos / Categorias / Centros de Custo -->
+    <div class="tab-bar" role="tablist" aria-label="Seções financeiras">
+      <button class="tab-item active" role="tab" aria-selected="true"  aria-controls="panel-lancamentos"  id="tab-lancamentos" >Lançamentos</button>
+      <button class="tab-item"        role="tab" aria-selected="false" aria-controls="panel-categorias"  id="tab-categorias"  >Categorias</button>
+      <button class="tab-item"        role="tab" aria-selected="false" aria-controls="panel-centros-custo" id="tab-centros-custo">Centros de Custo</button>
+    </div>
+
+    <!-- Tab: Lançamentos -->
+    <div class="tab-panel active" id="panel-lancamentos" role="tabpanel" aria-labelledby="tab-lancamentos" tabindex="0">
+      <div class="table-card">
+        <div class="table-card-header">
+          <span class="table-card-title">Lançamentos Financeiros</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Categoria</th>
+              <th>Centro de Custo</th>
+              <th>Tipo</th>
+              <th>Status</th>
+              <th class="num">Valor</th>
+              <th>Vencimento</th>
+            </tr>
+          </thead>
+          <tbody id="transactions-table">
+            <tr><td colspan="7" class="td-empty">Carregando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" id="transactions-pagination"></div>
+    </div>
+
+    <!-- Tab: Categorias -->
+    <div class="tab-panel" id="panel-categorias" role="tabpanel" aria-labelledby="tab-categorias" tabindex="0">
+      <div class="table-card">
+        <div class="table-card-header">
+          <span class="table-card-title">Categorias Financeiras</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Status</th>
+              <th>ID Externo</th>
+            </tr>
+          </thead>
+          <tbody id="categories-table">
+            <tr><td colspan="4" class="td-empty">Carregando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab: Centros de Custo -->
+    <div class="tab-panel" id="panel-centros-custo" role="tabpanel" aria-labelledby="tab-centros-custo" tabindex="0">
+      <div class="table-card">
+        <div class="table-card-header">
+          <span class="table-card-title">Centros de Custo</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Status</th>
+              <th>ID Externo</th>
+            </tr>
+          </thead>
+          <tbody id="cost-centers-table">
+            <tr><td colspan="3" class="td-empty">Carregando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main><!-- /page-content -->
+</div><!-- /erp-layout -->
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/financeiro.js"></script>
+</body>
+</html>

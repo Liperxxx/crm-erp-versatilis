@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar — ERP Bustech</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/login.css">
+</head>
+<body>
+
+<div class="login-layout">
+
+  <!-- ── Left panel: branding ─────────────────── -->
+  <aside class="login-left">
+    <div class="login-brand">
+      <div class="login-brand-logo">BG</div>
+      <div>
+        <span class="login-brand-name">Bustech Group</span>
+        <span class="login-brand-product">Gestao Financeira</span>
+      </div>
+    </div>
+
+    <div class="login-tagline">
+      <h2>Gestao financeira centralizada do grupo</h2>
+      <p>Receitas, despesas e resultados de todas as empresas consolidados em um unico ambiente de analise.</p>
+    </div>
+
+    <div class="login-features">
+      <div class="login-feature">
+        <span class="login-feature-dot"></span>
+        Dashboard por empresa e periodo
+      </div>
+      <div class="login-feature">
+        <span class="login-feature-dot"></span>
+        Comparativo Bustech x Versatilis
+      </div>
+      <div class="login-feature">
+        <span class="login-feature-dot"></span>
+        Visao consolidada do grupo
+      </div>
+      <div class="login-feature">
+        <span class="login-feature-dot"></span>
+        Integracao Conta Azul
+      </div>
+    </div>
+
+    <div class="login-left-footer">
+      Bustech Group &copy; 2025 &mdash; Uso interno
+    </div>
+  </aside>
+
+  <!-- ── Right panel: form ─────────────────────── -->
+  <main class="login-right">
+    <div class="login-form-wrap">
+      <h1 class="login-form-title">Acesso ao sistema</h1>
+      <p class="login-form-sub">Informe suas credenciais corporativas</p>
+
+      <div id="login-error" class="login-error" role="alert"></div>
+
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label class="field-label" for="email">E-mail</label>
+          <input
+            id="email"
+            type="email"
+            class="field-input"
+            placeholder="seu@email.com.br"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="password">Senha</label>
+          <input
+            id="password"
+            type="password"
+            class="field-input"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button id="btn-login" type="submit" class="btn-login">
+          Entrar
+        </button>
+      </form>
+
+      <div class="login-note">
+        <strong>Ambiente de desenvolvimento</strong><br>
+        Bustech: <code>admin@bustech.com.br</code> / <code>admin@dev123!</code><br>
+        Versatilis: <code>admin@versatilis.com.br</code> / <code>admin@dev123!</code>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+</body>
+</html>

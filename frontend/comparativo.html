@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparativo — ERP Bustech</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="erp-layout">
+  <main class="page-content">
+
+    <!-- ── Filter bar ──────────────────────────────────────────────────── -->
+    <div class="filter-bar">
+      <span class="filter-label">Período</span>
+      <div class="filter-sep"></div>
+      <input type="date" id="filter-start" class="filter-input" aria-label="Data inicial">
+      <span class="filter-label" style="font-weight:400;text-transform:none;letter-spacing:0">até</span>
+      <input type="date" id="filter-end"   class="filter-input" aria-label="Data final">
+      <div class="filter-sep"></div>
+      <button id="btn-apply" class="btn btn-primary">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Aplicar
+      </button>
+    </div>
+
+    <!-- ── Company snapshots ───────────────────────────────────────────── -->
+    <section aria-label="Comparação por empresa">
+      <div class="comparison-companies">
+
+        <div class="comparison-card comp-card-a">
+          <div class="comparison-card-header">
+            <span class="company-dot dot-a"></span>
+            <span class="comparison-card-title" id="comp-a-name">Bustech</span>
+            <span id="comp-a-leader" class="badge badge-blue" style="margin-left:auto;display:none">Líder</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-name">Receita Total</span>
+            <span class="metric-value" id="comp-a-revenue">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-name">Despesas Total</span>
+            <span class="metric-value" id="comp-a-expense">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-name">Lucro Líquido</span>
+            <span class="metric-value" id="comp-a-profit">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-name">Margem Líquida</span>
+            <span class="metric-value" id="comp-a-margin">—</span>
+          </div>
+        </div>
+
+        <div class="comparison-card comp-card-b">
+          <div class="comparison-card-header">
+            <span class="company-dot dot-b"></span>
+            <span class="comparison-card-title" id="comp-b-name">Versatilis</span>
+            <span id="comp-b-leader" class="badge badge-orange" style="margin-left:auto;display:none">Líder</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-name">Receita Total</span>
+            <span class="metric-value" id="comp-b-revenue">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-name">Despesas Total</span>
+            <span class="metric-value" id="comp-b-expense">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-name">Lucro Líquido</span>
+            <span class="metric-value" id="comp-b-profit">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-name">Margem Líquida</span>
+            <span class="metric-value" id="comp-b-margin">—</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Charts ──────────────────────────────────────────────────────── -->
+    <section aria-label="Evolução mensal comparativa">
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="section-head">
+            <span class="section-title">Receita Mensal</span>
+            <span class="section-sub" id="comp-chart-rev-sub"></span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="comp-chart-revenue"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="section-head">
+            <span class="section-title">Lucro Mensal</span>
+            <span class="section-sub" id="comp-chart-prf-sub"></span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="comp-chart-profit"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Category comparison ─────────────────────────────────────────── -->
+    <section aria-label="Comparativo por categoria">
+      <div class="table-card">
+        <div class="table-card-header">
+          <span class="table-card-title">Comparativo por Categoria</span>
+          <div style="display:flex;gap:6px;flex-shrink:0">
+            <button class="btn btn-ghost"    id="btn-cat-income"  data-dir="INCOME">Receitas</button>
+            <button class="btn btn-primary"  id="btn-cat-expense" data-dir="EXPENSE">Despesas</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Categoria</th>
+                <th class="num" id="comp-cat-th-a">Bustech</th>
+                <th class="num" id="comp-cat-th-b">Versatilis</th>
+                <th class="num">Diferença</th>
+                <th class="num">Var. %</th>
+              </tr>
+            </thead>
+            <tbody id="comp-cat-tbody">
+              <tr><td colspan="5" class="td-empty">Carregando…</td></tr>
+            </tbody>
+            <tfoot id="comp-cat-tfoot"></tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Cost-center comparison ──────────────────────────────────────── -->
+    <section aria-label="Comparativo por centro de custo">
+      <div class="table-card">
+        <div class="table-card-header">
+          <span class="table-card-title">Comparativo por Centro de Custo</span>
+          <div style="display:flex;gap:6px;flex-shrink:0">
+            <button class="btn btn-ghost"    id="btn-cc-income"  data-dir="INCOME">Receitas</button>
+            <button class="btn btn-primary"  id="btn-cc-expense" data-dir="EXPENSE">Despesas</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Centro de Custo</th>
+                <th class="num" id="comp-cc-th-a">Bustech</th>
+                <th class="num" id="comp-cc-th-b">Versatilis</th>
+                <th class="num">Diferença</th>
+                <th class="num">Var. %</th>
+              </tr>
+            </thead>
+            <tbody id="comp-cc-tbody">
+              <tr><td colspan="5" class="td-empty">Carregando…</td></tr>
+            </tbody>
+            <tfoot id="comp-cc-tfoot"></tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Monthly results table ───────────────────────────────────────── -->
+    <section aria-label="Tabela comparativa mensal">
+      <div class="table-card">
+        <div class="table-card-header">
+          <span class="table-card-title">Resultados Mensais</span>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Mês</th>
+                <th class="num">Rec. Bustech</th>
+                <th class="num">Rec. Versatilis</th>
+                <th class="num">Desp. Bustech</th>
+                <th class="num">Desp. Versatilis</th>
+                <th class="num">Lucro Bustech</th>
+                <th class="num">Lucro Versatilis</th>
+              </tr>
+            </thead>
+            <tbody id="comp-table">
+              <tr><td colspan="7" class="td-empty">Carregando…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /page-content -->
+</div><!-- /erp-layout -->
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script src="/assets/js/comparativo.js"></script>
+</body>
+</html>

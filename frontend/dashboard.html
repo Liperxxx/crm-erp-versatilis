@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard â€” ERP Bustech</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="erp-layout">
+  <main class="page-content">
+
+    <!-- ── Filter bar ──────────────────────────────────────────────────── -->
+    <div class="filter-bar">
+      <span class="filter-label">Ano</span>
+      <div class="filter-sep"></div>
+      <select id="filter-year" class="filter-input" aria-label="Selecionar ano do período">
+        <!-- Options populated by dashboard.js -->
+      </select>
+      <div class="filter-sep"></div>
+      <button id="btn-apply" class="btn btn-primary">Atualizar</button>
+    </div>
+
+    <!-- ── Consolidated KPIs ───────────────────────────────────────────── -->
+    <section aria-labelledby="consol-heading">
+      <h2 id="consol-heading" class="section-heading">Resultado Consolidado</h2>
+      <div class="kpi-row" id="consol-kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Receita Total</div>
+          <div class="kpi-value" id="consol-revenue">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Despesas Total</div>
+          <div class="kpi-value" id="consol-expense">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Lucro Líquido</div>
+          <div class="kpi-value" id="consol-profit">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Margem Líquida</div>
+          <div class="kpi-value" id="consol-margin">—</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Company snapshots ───────────────────────────────────────────── -->
+    <section aria-labelledby="companies-heading">
+      <h2 id="companies-heading" class="section-heading">Empresas</h2>
+      <div class="company-overview-grid">
+
+        <!-- Bustech -->
+        <article class="company-snap" aria-label="Bustech Tecnologia">
+          <header class="company-snap-header">
+            <div class="company-snap-icon" aria-hidden="true">B</div>
+            <div>
+              <div class="company-snap-name">Bustech Tecnologia</div>
+              <div class="company-snap-slug">bustech</div>
+            </div>
+            <div class="company-snap-pill" id="bt-badge">
+              <span class="badge badge-neutral">Carregando…</span>
+            </div>
+          </header>
+          <div class="company-snap-kpis">
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">Receita</div>
+              <div class="mini-kpi-value" id="bt-revenue">—</div>
+            </div>
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">Despesas</div>
+              <div class="mini-kpi-value" id="bt-expense">—</div>
+            </div>
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">Lucro</div>
+              <div class="mini-kpi-value" id="bt-profit">—</div>
+            </div>
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">Margem</div>
+              <div class="mini-kpi-value" id="bt-margin">—</div>
+            </div>
+          </div>
+          <div class="chart-wrap" style="height:120px">
+            <canvas id="bt-chart"></canvas>
+          </div>
+          <footer class="company-snap-footer">
+            <a href="/empresas/bustech.html" class="link-detail">Ver dashboard completo →</a>
+          </footer>
+        </article>
+
+        <!-- Versatilis -->
+        <article class="company-snap versatilis" aria-label="Versatilis">
+          <header class="company-snap-header">
+            <div class="company-snap-icon versatilis" aria-hidden="true">V</div>
+            <div>
+              <div class="company-snap-name">Versatilis</div>
+              <div class="company-snap-slug">versatilis</div>
+            </div>
+            <div class="company-snap-pill" id="vt-badge">
+              <span class="badge badge-neutral">Carregando…</span>
+            </div>
+          </header>
+          <div class="company-snap-kpis">
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">Receita</div>
+              <div class="mini-kpi-value" id="vt-revenue">—</div>
+            </div>
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">Despesas</div>
+              <div class="mini-kpi-value" id="vt-expense">—</div>
+            </div>
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">Lucro</div>
+              <div class="mini-kpi-value" id="vt-profit">—</div>
+            </div>
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">Margem</div>
+              <div class="mini-kpi-value" id="vt-margin">—</div>
+            </div>
+          </div>
+          <div class="chart-wrap" style="height:120px">
+            <canvas id="vt-chart"></canvas>
+          </div>
+          <footer class="company-snap-footer">
+            <a href="/empresas/versatilis.html" class="link-detail">Ver dashboard completo →</a>
+          </footer>
+        </article>
+
+      </div>
+    </section>
+
+  </main><!-- /page-content -->
+</div><!-- /erp-layout -->
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+</body>
+</html>

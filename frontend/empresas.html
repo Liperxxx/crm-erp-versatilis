@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresas — ERP Bustech</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div class="erp-layout">
+  <main class="page-content">
+
+    <!-- Header -->
+    <div class="filter-bar">
+      <span class="filter-label">Empresas do Grupo</span>
+      <div class="filter-spacer"></div>
+      <div class="filter-meta">
+        <span class="filter-meta-dot"></span>
+        <span id="company-count">Carregando…</span>
+      </div>
+    </div>
+
+    <!-- Companies grid -->
+    <div id="companies-grid" class="companies-grid">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- Company detail (hidden by default) -->
+    <div id="company-detail" class="company-detail" style="display:none;">
+      <!-- populated by JS -->
+    </div>
+
+  </main><!-- /page-content -->
+</div><!-- /erp-layout -->
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/empresas.js"></script>
+</body>
+</html>

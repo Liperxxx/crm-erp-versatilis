@@ -1,0 +1,9 @@
+CREATE TABLE contaazul_tokens (
+    id                      BIGSERIAL PRIMARY KEY,
+    company_id              BIGINT      NOT NULL UNIQUE REFERENCES companies(id),
+    access_token            TEXT        NOT NULL,
+    refresh_token           TEXT        NOT NULL,
+    access_token_expires_at TIMESTAMPTZ NOT NULL,
+    created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

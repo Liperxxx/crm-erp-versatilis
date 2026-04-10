@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centros de Custo — ERP Bustech</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="erp-layout">
+  <main class="page-content" id="main-content">
+
+    <!-- ── Filter bar ──────────────────────────────────────────────────── -->
+    <div class="filter-bar">
+      <span class="filter-label">Período</span>
+      <div class="filter-sep"></div>
+      <input type="date" id="filter-start" class="filter-input" aria-label="Data inicial">
+      <span style="font-size:11px;color:var(--t4);padding:0 4px">até</span>
+      <input type="date" id="filter-end" class="filter-input" aria-label="Data final">
+      <div class="filter-sep"></div>
+      <span class="filter-label">Empresa</span>
+      <select id="filter-company" class="filter-input" aria-label="Empresa">
+        <option value="1">Bustech</option>
+        <option value="2">Versatilis</option>
+        <option value="comp">Comparativo</option>
+      </select>
+      <div class="filter-sep" id="metrica-sep" style="display:none"></div>
+      <select id="filter-metrica" class="filter-input" aria-label="Métrica" style="display:none">
+        <option value="summary">Receita + Despesas</option>
+        <option value="revenue">Receita</option>
+        <option value="expenses">Despesas</option>
+      </select>
+      <div class="filter-sep"></div>
+      <button id="btn-apply" class="btn btn-primary">Aplicar</button>
+    </div>
+
+    <!-- ── KPI row ─────────────────────────────────────────────────────── -->
+    <div class="kpi-row" id="kpi-row"></div>
+
+    <!-- ── Chart ──────────────────────────────────────────────────────── -->
+    <div class="table-card" id="chart-section" style="display:none">
+      <div class="table-card-header">
+        <span class="table-card-title" id="chart-title">Análise por Centro de Custo</span>
+      </div>
+      <div style="padding:4px 14px 14px">
+        <div id="chart-container" style="position:relative;height:220px">
+          <canvas id="cc-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Analytic table ─────────────────────────────────────────────── -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-card-title" id="table-title">Análise por Centro de Custo</span>
+        <span class="section-sub" id="cc-count"></span>
+      </div>
+      <div id="table-container">
+        <p class="td-empty">Selecione o período e clique em Aplicar.</p>
+      </div>
+    </div>
+
+  </main><!-- /page-content -->
+</div><!-- /erp-layout -->
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/components.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script src="/assets/js/centros.js"></script>
+</body>
+</html>
