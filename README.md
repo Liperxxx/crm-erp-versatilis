@@ -33,7 +33,7 @@ Spring Boot 3.5 · Java 25 · PostgreSQL · Flyway · JWT
 | Variável | Exemplo | Uso |
 | --- | --- | --- |
 | `BACKEND_API_BASE_URL` | `https://seu-backend.up.railway.app` | Proxy do frontend `/api/*` → backend |
-| `CONTAAZUL_FRONTEND_URL` | `https://seu-frontend.vercel.app/dashboard.html` | Variável do backend para redireciono pós-OAuth2 ao frontend publicado |
+| `CONTAAZUL_FRONTEND_URL` | `https://seu-frontend.vercel.app/dashboard.html` | Variável do backend para redirecionamento pós-OAuth2 ao frontend publicado |
 
 Com isso, o frontend publicado no Vercel continua usando chamadas relativas como `/api/auth/login`, mas a execução real acontece no backend configurado.
 
