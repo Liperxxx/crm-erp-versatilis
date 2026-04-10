@@ -33,7 +33,10 @@ function resolveBackendBaseUrl() {
     throw new Error('BACKEND_API_BASE_URL deve usar http ou https.');
   }
 
-  parsed.pathname = parsed.pathname.replace(/\/+$/, '').replace(/\/api$/, '');
+  parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+  if (parsed.pathname === '/api') {
+    parsed.pathname = '';
+  }
   parsed.search = '';
   parsed.hash = '';
 
@@ -50,7 +53,7 @@ function buildForwardHeaders(req) {
 
   for (const [key, value] of Object.entries(req.headers || {})) {
     const lowerKey = key.toLowerCase();
-    if (HOP_BY_HOP_HEADERS.has(lowerKey) || value == null) {
+    if (HOP_BY_HOP_HEADERS.has(lowerKey) || value === null || value === undefined) {
       continue;
     }
 
