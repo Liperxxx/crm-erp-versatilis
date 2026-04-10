@@ -43,6 +43,10 @@ public class ProdDataInitializer implements ApplicationRunner {
             return;
         }
 
+        if (adminInitialPassword.length() < 12) {
+            log.warn("ADMIN_INITIAL_PASSWORD tem menos de 12 caracteres. Recomenda-se uma senha mais forte para producao.");
+        }
+
         List<SeedUser> seeds = List.of(
             new SeedUser("Administrador Bustech", "admin@bustech.com.br", "bustech"),
             new SeedUser("Administrador Versatilis", "admin@versatilis.com.br", "versatilis")
@@ -55,9 +59,7 @@ public class ProdDataInitializer implements ApplicationRunner {
                 continue;
             }
 
-            Company company = companyRepository.findAll().stream()
-                .filter(c -> c.getSlug().equalsIgnoreCase(seed.companySlug()))
-                .findFirst()
+            Company company = companyRepository.findBySlugIgnoreCase(seed.companySlug())
                 .orElse(null);
 
             if (company == null) {
