@@ -134,6 +134,7 @@ module.exports = async function handler(req, res) {
         res.status(502).json({ message: 'Erro ao transmitir a resposta do backend.' });
         return;
       }
+      stream.destroy();
       res.destroy();
     });
     stream.pipe(res);
