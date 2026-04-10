@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,11 +21,32 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+    private static final int MIN_KEY_LENGTH_BYTES = 32;
+
     @Value("${app.jwt.secret}")
     private String secretKey;
 
     @Value("${app.jwt.expiration-ms}")
     private long expirationMs;
+
+    @PostConstruct
+    void validateSecretKey() {
+        if (secretKey == null || secretKey.isBlank()) {
+            log.error("JWT_SECRET nao esta configurado. Defina a variavel de ambiente JWT_SECRET com no minimo {} caracteres.", MIN_KEY_LENGTH_BYTES);
+            throw new IllegalStateException(
+                    "JWT_SECRET nao esta configurado. Defina a variavel de ambiente JWT_SECRET com no minimo "
+                    + MIN_KEY_LENGTH_BYTES + " caracteres.");
+        }
+        if (secretKey.getBytes(StandardCharsets.UTF_8).length < MIN_KEY_LENGTH_BYTES) {
+            log.error("JWT_SECRET muito curto ({} bytes). Minimo necessario: {} bytes.",
+                    secretKey.getBytes(StandardCharsets.UTF_8).length, MIN_KEY_LENGTH_BYTES);
+            throw new IllegalStateException(
+                    "JWT_SECRET muito curto. Minimo necessario: " + MIN_KEY_LENGTH_BYTES + " bytes. "
+                    + "Gere com: openssl rand -base64 64");
+        }
+        log.info("JWT configurado com sucesso (key={} bytes, expiration={}ms).",
+                secretKey.getBytes(StandardCharsets.UTF_8).length, expirationMs);
+    }
 
     public String generateToken(UserDetails userDetails, Long companyId) {
         Map<String, Object> claims = new HashMap<>();

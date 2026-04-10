@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -59,8 +61,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiErrorResponse> handleBadCredentials(BadCredentialsException ex, HttpServletRequest req) {
+        log.warn("Credenciais invalidas para [{}]: {}", req.getRequestURI(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ApiErrorResponse.of(401, "Unauthorized", ErrorCode.BAD_CREDENTIALS, "Credenciais invalidas.", req.getRequestURI()));
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity<ApiErrorResponse> handleInternalAuthError(InternalAuthenticationServiceException ex, HttpServletRequest req) {
+        log.error("Erro interno de autenticacao [{}]: {}", req.getRequestURI(), ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiErrorResponse.of(500, "Internal Server Error", ErrorCode.INTERNAL_ERROR,
+                        "Erro interno durante autenticacao. Verifique os logs do servidor.", req.getRequestURI()));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthenticationException(AuthenticationException ex, HttpServletRequest req) {
+        log.warn("Falha de autenticacao [{}]: {} - {}", req.getRequestURI(), ex.getClass().getSimpleName(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiErrorResponse.of(401, "Unauthorized", ErrorCode.BAD_CREDENTIALS, "Falha na autenticacao.", req.getRequestURI()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
