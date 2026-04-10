@@ -10,6 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -81,6 +84,36 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(body(response).code()).isEqualTo(ErrorCode.UNAUTHORIZED.name());
         assertThat(body(response).message()).isEqualTo("Token expirado");
+    }
+
+    @Test
+    void usernameNotFoundException_returns401() {
+        var ex = new UsernameNotFoundException("Usuario nao encontrado");
+
+        var response = handler.handleAuthenticationException(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(body(response).code()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
+    }
+
+    @Test
+    void authenticationException_returns401() {
+        var ex = new AuthenticationException("Falha de autenticacao") {};
+
+        var response = handler.handleAuthenticationException(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(body(response).code()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
+    }
+
+    @Test
+    void internalAuthenticationServiceException_returns500() {
+        var ex = new InternalAuthenticationServiceException("DB connection failed");
+
+        var response = handler.handleInternalAuthError(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(body(response).code()).isEqualTo(ErrorCode.INTERNAL_ERROR.name());
     }
 
     // ─── 403 Forbidden ────────────────────────────────────────────────────────
