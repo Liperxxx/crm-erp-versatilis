@@ -1,3 +1,5 @@
+const { Readable } = require('node:stream');
+
 const HOP_BY_HOP_HEADERS = new Set([
   'connection',
   'content-length',
@@ -10,13 +12,10 @@ const HOP_BY_HOP_HEADERS = new Set([
   'transfer-encoding',
   'upgrade',
 ]);
+const REQUEST_URL_BASE = 'http://localhost';
 
 function resolveBackendBaseUrl() {
-  const raw =
-    process.env.BACKEND_API_BASE_URL ||
-    process.env.ERP_API_BASE_URL ||
-    process.env.BACKEND_BASE_URL ||
-    '';
+  const raw = process.env.BACKEND_API_BASE_URL || '';
 
   if (!raw) {
     throw new Error('BACKEND_API_BASE_URL não foi configurada no projeto Vercel.');
@@ -44,7 +43,7 @@ function resolveBackendBaseUrl() {
 }
 
 function buildTargetUrl(req, backendBaseUrl) {
-  const requestUrl = new URL(req.url, 'http://localhost');
+  const requestUrl = new URL(req.url, REQUEST_URL_BASE);
   return backendBaseUrl + requestUrl.pathname + requestUrl.search;
 }
 
@@ -116,8 +115,12 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    const buffer = Buffer.from(await upstream.arrayBuffer());
-    res.send(buffer);
+    if (!upstream.body) {
+      res.end();
+      return;
+    }
+
+    Readable.fromWeb(upstream.body).pipe(res);
   } catch (error) {
     res.status(502).json({
       message: 'Não foi possível encaminhar a requisição para o backend.',
