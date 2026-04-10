@@ -28,7 +28,7 @@ Spring Boot 3.5 · Java 25 · PostgreSQL · Flyway · JWT
 - Configure a variável de ambiente `BACKEND_API_BASE_URL` no projeto Vercel com a **URL base do backend** (ex.: `https://seu-backend.up.railway.app`), sem sufixo `/api`.
 - Para o OAuth2 da Conta Azul, defina no backend `CONTAAZUL_FRONTEND_URL` apontando para a URL final do frontend no Vercel (ex.: `https://seu-frontend.vercel.app/dashboard.html`).
 
-### Resumo da configuração no Vercel
+### Resumo da configuração no Vercel e no backend
 
 | Variável | Exemplo | Uso |
 | --- | --- | --- |

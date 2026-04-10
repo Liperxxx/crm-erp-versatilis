@@ -58,7 +58,8 @@ function buildForwardHeaders(req) {
     }
 
     if (Array.isArray(value)) {
-      value.forEach((item) => headers.append(key, item));
+      const values = value;
+      values.forEach((item) => headers.append(key, item));
       continue;
     }
 
@@ -86,7 +87,9 @@ function readRequestBody(req) {
 
 module.exports = async function handler(req, res) {
   try {
-    cachedBackendBaseUrl ||= resolveBackendBaseUrl();
+    if (cachedBackendBaseUrl === undefined) {
+      cachedBackendBaseUrl = resolveBackendBaseUrl();
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
     return;
