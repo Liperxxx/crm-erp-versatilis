@@ -31,7 +31,7 @@ Spring Boot 3.5 · Java 25 · PostgreSQL · Flyway · JWT
 ### Resumo da configuração no Vercel
 
 | Variável | Exemplo | Uso |
-|---------|---------|-----|
+| --- | --- | --- |
 | `BACKEND_API_BASE_URL` | `https://seu-backend.up.railway.app` | Proxy do frontend `/api/*` → backend |
 
 Com isso, o frontend publicado no Vercel continua usando chamadas relativas como `/api/auth/login`, mas a execução real acontece no backend configurado.

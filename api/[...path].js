@@ -73,7 +73,7 @@ function readRequestBody(req) {
     return undefined;
   }
 
-  if (req.body == null) {
+  if (req.body === null || req.body === undefined) {
     return undefined;
   }
 
