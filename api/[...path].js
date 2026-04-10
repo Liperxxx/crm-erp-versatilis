@@ -41,6 +41,8 @@ function resolveBackendBaseUrl() {
   }
 
   parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+  // When the backend origin is configured with a trailing `/api`, strip it here
+  // because the proxied request path already starts with `/api/...`.
   if (parsed.pathname === '/api') {
     parsed.pathname = '';
   }
@@ -125,7 +127,16 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    Readable.fromWeb(upstream.body).pipe(res);
+    const stream = Readable.fromWeb(upstream.body);
+    stream.on('error', () => {
+      // Fetch errors are handled above; this covers failures while streaming the body.
+      if (!res.headersSent) {
+        res.status(502).json({ message: 'Erro ao transmitir a resposta do backend.' });
+        return;
+      }
+      res.destroy();
+    });
+    stream.pipe(res);
   } catch (error) {
     res.status(502).json({
       message: 'Não foi possível encaminhar a requisição para o backend.',
