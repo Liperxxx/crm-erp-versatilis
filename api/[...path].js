@@ -13,6 +13,7 @@ const HOP_BY_HOP_HEADERS = new Set([
   'upgrade',
 ]);
 const REQUEST_URL_BASE = 'http://localhost';
+let cachedBackendBaseUrl;
 
 function resolveBackendBaseUrl() {
   const raw = process.env.BACKEND_API_BASE_URL || '';
@@ -84,15 +85,14 @@ function readRequestBody(req) {
 }
 
 module.exports = async function handler(req, res) {
-  let backendBaseUrl;
   try {
-    backendBaseUrl = resolveBackendBaseUrl();
+    cachedBackendBaseUrl ||= resolveBackendBaseUrl();
   } catch (error) {
     res.status(500).json({ message: error.message });
     return;
   }
 
-  const targetUrl = buildTargetUrl(req, backendBaseUrl);
+  const targetUrl = buildTargetUrl(req, cachedBackendBaseUrl);
 
   try {
     const upstream = await fetch(targetUrl, {
