@@ -33,11 +33,8 @@ public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINTS = {
         "/",
         "/index.html",
-        "/*.html",
         "/**/*.html",
         "/assets/**",
-        "/empresas/**",
-        "/configuracoes/**",
         "/favicon.ico",
         "/api/auth/**",
         "/api/integrations/conta-azul/callback",

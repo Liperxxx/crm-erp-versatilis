@@ -5,7 +5,7 @@
 
 const API = {
   BASE: (() => {
-    const explicitBase = window.__ERP_API_BASE__ || document.querySelector('meta[name="erp-api-base"]')?.content;
+    const explicitBase = window.erpApiBase || document.querySelector('meta[name="erp-api-base"]')?.content;
     if (explicitBase) return explicitBase.replace(/\/$/, '');
 
     const origin = window.location.origin;
