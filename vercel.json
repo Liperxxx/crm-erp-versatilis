@@ -27,6 +27,14 @@
   ],
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://crm-erp-versatilis-production.up.railway.app/api/:path*"
+    },
+    {
+      "source": "/actuator/:path*",
+      "destination": "https://crm-erp-versatilis-production.up.railway.app/actuator/:path*"
+    },
+    {
       "source": "/",
       "destination": "/frontend/index.html"
     },
