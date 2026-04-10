@@ -4,7 +4,15 @@
  */
 
 const API = {
-  BASE: 'http://localhost:8081',
+  BASE: (() => {
+    const explicitBase = window.erpApiBase || document.querySelector('meta[name="erp-api-base"]')?.content;
+    if (explicitBase) return explicitBase.replace(/\/$/, '');
+
+    const origin = window.location.origin;
+    if (!origin || origin === 'null') return 'http://localhost:8081';
+    if (origin === 'http://localhost:3000' || origin === 'http://127.0.0.1:3000') return 'http://localhost:8081';
+    return origin.replace(/\/$/, '');
+  })(),
 
   /** Always-fresh headers including Authorization when logged in. */
   headers() {
