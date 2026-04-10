@@ -14,6 +14,31 @@ Spring Boot 3.5 · Java 25 · PostgreSQL · Flyway · JWT
 
 ---
 
+## Deploy no Railway
+
+- O repositório agora está pronto para **deploy único** no Railway: o backend Spring Boot empacota e serve o frontend estático.
+- O `Dockerfile` fixa o build/runtime em **Java 25**, evitando mismatch com ambientes que venham com Java 17 por padrão.
+- O frontend passa a consumir a API no **mesmo domínio** do deploy; em desenvolvimento local separado (`localhost:3000`) ele continua usando `http://localhost:8081`.
+
+### Variáveis obrigatórias no serviço web
+
+| Variável | Descrição |
+|---------|-----------|
+| `SPRING_PROFILES_ACTIVE=prod` | Ativa configuração de produção |
+| `JWT_SECRET` | Chave JWT com no mínimo 32 caracteres |
+| `CONTAAZUL_REDIRECT_URI` | Callback OAuth2 pública |
+| `CONTAAZUL_FRONTEND_URL` | URL final do frontend, ex.: `https://SEU_DOMINIO.up.railway.app/dashboard.html` |
+
+### Banco PostgreSQL no Railway
+
+Se o banco também estiver no Railway, a aplicação já aceita os envs padrão do plugin PostgreSQL (`PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`) sem precisar montar JDBC manualmente.
+
+### Healthcheck recomendado
+
+Use `/actuator/health`.
+
+---
+
 ## Executar localmente (VS Code / terminal)
 
 ### 1. Crie o banco de dados

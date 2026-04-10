@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL:${JDBC_DATABASE_URL:jdbc:postgresql://${PGHOST}:${PGPORT:5432}/${PGDATABASE:${POSTGRES_DB:postgres}}}}
+    username: ${SPRING_DATASOURCE_USERNAME:${DATABASE_USERNAME:${PGUSER:${POSTGRES_USER:postgres}}}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DATABASE_PASSWORD:${PGPASSWORD:${POSTGRES_PASSWORD:}}}}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 20
@@ -27,8 +27,6 @@ logging:
     com.bustech.erp: INFO
     org.springframework: WARN
     root: WARN
-  file:
-    name: /var/log/erp/application.log
 
 app:
   contaazul:

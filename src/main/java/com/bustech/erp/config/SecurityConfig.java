@@ -31,6 +31,14 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
 
     private static final String[] PUBLIC_ENDPOINTS = {
+        "/",
+        "/index.html",
+        "/*.html",
+        "/**/*.html",
+        "/assets/**",
+        "/empresas/**",
+        "/configuracoes/**",
+        "/favicon.ico",
         "/api/auth/**",
         "/api/integrations/conta-azul/callback",
         "/actuator/health",
@@ -65,4 +73,3 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 }
-
