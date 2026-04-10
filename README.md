@@ -21,6 +21,21 @@ Spring Boot 3.5 · Java 25 · PostgreSQL · Flyway · JWT
 - O `railway.json` força o Railway a usar esse `Dockerfile`, evitando o start automático padrão com `java -jar target/*.jar`.
 - O frontend passa a consumir a API no **mesmo domínio** do deploy; em desenvolvimento local separado (`localhost:3000`) ele continua usando `http://localhost:8081`.
 
+## Deploy do frontend no Vercel
+
+- O arquivo `vercel.json` publica o conteúdo da pasta `frontend/` na raiz do domínio (`/login.html`, `/dashboard.html`, `/assets/...` etc.).
+- A função `api/[...path].js` faz proxy de todas as chamadas `/api/*` para o backend configurado no ambiente do Vercel.
+- Configure a variável de ambiente `BACKEND_API_BASE_URL` no projeto Vercel com a **URL base do backend** (ex.: `https://seu-backend.up.railway.app`), sem sufixo `/api`.
+- Para o OAuth2 da Conta Azul, defina no backend `CONTAAZUL_FRONTEND_URL` apontando para a URL final do frontend no Vercel (ex.: `https://seu-frontend.vercel.app/dashboard.html`).
+
+### Resumo da configuração no Vercel
+
+| Variável | Exemplo | Uso |
+|---------|---------|-----|
+| `BACKEND_API_BASE_URL` | `https://seu-backend.up.railway.app` | Proxy do frontend `/api/*` → backend |
+
+Com isso, o frontend publicado no Vercel continua usando chamadas relativas como `/api/auth/login`, mas a execução real acontece no backend configurado.
+
 ### Variáveis obrigatórias no serviço web
 
 | Variável | Descrição |
