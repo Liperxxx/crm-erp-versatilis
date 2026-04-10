@@ -91,10 +91,10 @@ const Layout = {
     { key: 'centros',     label: 'Centros de Custo', href: '/centros-de-custo.html',
       icon: '<path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>' },
 
-    { group: 'AdministraÃ§Ã£o' },
-    { key: 'integracoes', label: 'IntegraÃ§Ãµes',      href: '/configuracoes/integracoes.html',
+    { group: 'Administração' },
+    { key: 'integracoes', label: 'Integrações',      href: '/configuracoes/integracoes.html',
       icon: '<path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>' },
-    { key: 'usuarios',    label: 'UsuÃ¡rios',         href: '/usuarios.html',
+    { key: 'usuarios',    label: 'Usuários',         href: '/usuarios.html',
       icon: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>' },
   ],
 
