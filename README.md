@@ -18,6 +18,7 @@ Spring Boot 3.5 · Java 25 · PostgreSQL · Flyway · JWT
 
 - O repositório agora está pronto para **deploy único** no Railway: o backend Spring Boot empacota e serve o frontend estático.
 - O `Dockerfile` fixa o build/runtime em **Java 25**, evitando mismatch com ambientes que venham com Java 17 por padrão.
+- O `railway.json` força o Railway a usar esse `Dockerfile`, evitando o start automático padrão com `java -jar target/*.jar`.
 - O frontend passa a consumir a API no **mesmo domínio** do deploy; em desenvolvimento local separado (`localhost:3000`) ele continua usando `http://localhost:8081`.
 
 ### Variáveis obrigatórias no serviço web
