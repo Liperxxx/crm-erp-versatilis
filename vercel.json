@@ -1,5 +1,9 @@
 {
   "$schema": "https://openapi.vercel.com/vercel.json",
+  "builds": [
+    { "src": "api/[...path].js", "use": "@vercel/node" },
+    { "src": "frontend/**", "use": "@vercel/static" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
