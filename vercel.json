@@ -37,8 +37,52 @@
       "destination": "/frontend/configuracoes/:path*"
     },
     {
-      "source": "/:path*.html",
-      "destination": "/frontend/:path*.html"
+      "source": "/login.html",
+      "destination": "/frontend/login.html"
+    },
+    {
+      "source": "/dashboard.html",
+      "destination": "/frontend/dashboard.html"
+    },
+    {
+      "source": "/comparativo.html",
+      "destination": "/frontend/comparativo.html"
+    },
+    {
+      "source": "/consolidado.html",
+      "destination": "/frontend/consolidado.html"
+    },
+    {
+      "source": "/categorias.html",
+      "destination": "/frontend/categorias.html"
+    },
+    {
+      "source": "/centros-de-custo.html",
+      "destination": "/frontend/centros-de-custo.html"
+    },
+    {
+      "source": "/conta-azul.html",
+      "destination": "/frontend/conta-azul.html"
+    },
+    {
+      "source": "/empresas.html",
+      "destination": "/frontend/empresas.html"
+    },
+    {
+      "source": "/financeiro.html",
+      "destination": "/frontend/financeiro.html"
+    },
+    {
+      "source": "/usuarios.html",
+      "destination": "/frontend/usuarios.html"
+    },
+    {
+      "source": "/configuracoes.html",
+      "destination": "/frontend/configuracoes.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/frontend/index.html"
     }
   ]
 }

@@ -14,6 +14,13 @@ const HOP_BY_HOP_HEADERS = new Set([
 ]);
 const REQUEST_URL_BASE = 'http://localhost';
 let cachedBackendBaseUrl;
+let cachedBackendBaseUrlError;
+
+try {
+  cachedBackendBaseUrl = resolveBackendBaseUrl();
+} catch (error) {
+  cachedBackendBaseUrlError = error;
+}
 
 function resolveBackendBaseUrl() {
   const raw = process.env.BACKEND_API_BASE_URL || '';
@@ -58,8 +65,7 @@ function buildForwardHeaders(req) {
     }
 
     if (Array.isArray(value)) {
-      const values = value;
-      values.forEach((item) => headers.append(key, item));
+      value.forEach((item) => headers.append(key, item));
       continue;
     }
 
@@ -86,12 +92,8 @@ function readRequestBody(req) {
 }
 
 module.exports = async function handler(req, res) {
-  try {
-    if (cachedBackendBaseUrl === undefined) {
-      cachedBackendBaseUrl = resolveBackendBaseUrl();
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  if (cachedBackendBaseUrlError) {
+    res.status(500).json({ message: cachedBackendBaseUrlError.message });
     return;
   }
 
